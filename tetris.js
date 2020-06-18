@@ -4,18 +4,18 @@ const context = canvas.getContext('2d');
 context.scale(30, 30);
 
 context.fillStyle = '#99aab5';
-context.lineWidth = 0.5
+context.lineWidth = 0.03
 context.fillRect(0, 0, canvas.width, canvas.height);
 
 function drawGrid() {
-    for (i = 0; i < canvas.width; i++) {
+    for (i = 0; i < canvas.height / 30; i++) {
         context.moveTo(0, i);
-        context.lineTo(canvas.width, i);
+        context.lineTo(canvas.height, i);
         context.stroke();
     }
-    for (i = 0; i < canvas.height; i++) {
+    for (i = 0; i < canvas.width / 30; i++) {
         context.moveTo(i, 0);
-        context.lineTo(i, canvas.height);
+        context.lineTo(i, canvas.width);
         context.stroke();
     }
 }
@@ -124,6 +124,7 @@ function draw() {
 
     drawMatrix(board, { x: 0, y: 0 });
     drawMatrix(player.matrix, player.pos)
+    drawGrid();
 }
 
 function merge(board, player) {
