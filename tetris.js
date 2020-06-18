@@ -1,12 +1,27 @@
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
-context.scale(20, 20);
+context.scale(30, 30);
 
 context.fillStyle = '#99aab5';
+context.lineWidth = 0.5
 context.fillRect(0, 0, canvas.width, canvas.height);
 
+function drawGrid() {
+    for (i = 0; i < canvas.width; i++) {
+        context.moveTo(0, i);
+        context.lineTo(canvas.width, i);
+        context.stroke();
+    }
+    for (i = 0; i < canvas.height; i++) {
+        context.moveTo(i, 0);
+        context.lineTo(i, canvas.height);
+        context.stroke();
+    }
+}
+
 function boardSweep() {
+    let lineCount = 1;
     outer: for (let y = board.length - 1; y > 0; y--) {
         for (let x = 0; x < board[y].length; x++) {
             if (board[y][x] === 0) {
@@ -16,7 +31,9 @@ function boardSweep() {
 
         let row = board.splice(y, 1)[0].fill(0);
         board.unshift(row);
-        y++
+        y++;
+        player.score += lineCount * 10;
+        lineCount *= 2;
     }
 }
 
@@ -95,6 +112,7 @@ function drawMatrix(matrix, offset) {
             if (value !== 0) {
                 context.fillStyle = colors[value];
                 context.fillRect(x + offset.x, y + offset.y, 1, 1);
+
             }
         });
     });
@@ -125,6 +143,7 @@ function playerDrop() {
         merge(board, player);
         playerReset();
         boardSweep();
+        updateScore();
     }
     dropCounter = 0;
 }
@@ -137,6 +156,7 @@ function playerInstaDrop() {
     merge(board, player);
     playerReset();
     boardSweep();
+    updateScore();
 }
 
 function playerMove(direction) {
@@ -146,14 +166,31 @@ function playerMove(direction) {
     }
 }
 
+const allPieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z'];
+let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z'];
 function playerReset() {
-    const pieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z'];
-    player.matrix = createPiece(pieces[Math.floor(pieces.length * Math.random())])
+    let randomNumber = Math.floor(availablePieces.length * Math.random());
+    player.matrix = createPiece(availablePieces[randomNumber]);
+
+    if (availablePieces.length > 1) {
+        availablePieces.splice(randomNumber, 1);
+    } else if (availablePieces.length <= 1) {
+        availablePieces.pop();
+        for (let i = 0; i < allPieces.length; i++) {
+            availablePieces.push(allPieces[i]);
+        }
+    }
+    console.log(availablePieces);
+    console.log(allPieces);
+
     player.pos.y = 0;
     player.pos.x = Math.floor(board[0].length / 2) - 1;
 
     if (collide(board, player)) {
-        board.forEach(row => row.fill(0))
+        board.forEach(row => row.fill(0));
+        player.score = 0;
+        availablePieces = allPieces;
+        updateScore();
     }
 }
 
@@ -196,13 +233,18 @@ function update(time = 0) {
     requestAnimationFrame(update);
 }
 
+function updateScore() {
+    document.getElementById('score').innerText = player.score;
+}
+
 const colors = [null, '#2fedfd', '#5fd2ff', '#969efd', '#c465ff', '#e92fff', '#ef16fd', '#e91ff7'];
 
 const board = createMatrix(12, 20);
 
 const player = {
     pos: { x: 5, y: 1 },
-    matrix: createPiece('T')
+    matrix: null,
+    score: 0
 }
 
 document.addEventListener('keydown', key => {
@@ -219,4 +261,6 @@ document.addEventListener('keydown', key => {
     }
 })
 
-update()
+playerReset();
+updateScore();
+update();
