@@ -1,21 +1,22 @@
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
-context.scale(30, 30);
+const blockSide = 30;
 
 context.fillStyle = '#99aab5';
-context.lineWidth = 0.03
+context.lineWidth = 1;
 context.fillRect(0, 0, canvas.width, canvas.height);
 
 function drawGrid() {
-    for (i = 0; i < canvas.height / 30; i++) {
+    for (i = 0; i < canvas.height; i += blockSide) {
         context.moveTo(0, i);
-        context.lineTo(canvas.height, i);
+        context.lineTo(canvas.width, i);
         context.stroke();
     }
-    for (i = 0; i < canvas.width / 30; i++) {
+
+    for (i = 0; i < canvas.width; i += blockSide) {
         context.moveTo(i, 0);
-        context.lineTo(i, canvas.width);
+        context.lineTo(i, canvas.height);
         context.stroke();
     }
 }
@@ -111,7 +112,7 @@ function drawMatrix(matrix, offset) {
         row.forEach((value, x) => {
             if (value !== 0) {
                 context.fillStyle = colors[value];
-                context.fillRect(x + offset.x, y + offset.y, 1, 1);
+                context.fillRect((x + offset.x) * blockSide, (y + offset.y) * blockSide, blockSide, blockSide);
 
             }
         });
@@ -119,11 +120,12 @@ function drawMatrix(matrix, offset) {
 }
 
 function draw() {
+    canvas.width = canvas.width;
     context.fillStyle = '#2c2f33';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     drawMatrix(board, { x: 0, y: 0 });
-    drawMatrix(player.matrix, player.pos)
+    drawMatrix(player.matrix, player.pos);
     drawGrid();
 }
 
@@ -181,8 +183,6 @@ function playerReset() {
             availablePieces.push(allPieces[i]);
         }
     }
-    console.log(availablePieces);
-    console.log(allPieces);
 
     player.pos.y = 0;
     player.pos.x = Math.floor(board[0].length / 2) - 1;
