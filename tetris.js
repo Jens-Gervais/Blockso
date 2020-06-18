@@ -70,22 +70,22 @@ function createPiece(type) {
         ];
     } else if (type === 'I') {
         return [
-            [0, 0, 2, 0],
-            [0, 0, 2, 0],
-            [0, 0, 2, 0],
-            [0, 0, 2, 0]
+            [0, 2, 0, 0],
+            [0, 2, 0, 0],
+            [0, 2, 0, 0],
+            [0, 2, 0, 0]
         ];
     } else if (type === 'J') {
         return [
-            [0, 0, 3],
-            [0, 0, 3],
-            [0, 3, 3]
+            [0, 3, 0],
+            [0, 3, 0],
+            [3, 3, 0]
         ];
     } else if (type === 'L') {
         return [
-            [4, 0, 0],
-            [4, 0, 0],
-            [4, 4, 0]
+            [0, 4, 0],
+            [0, 4, 0],
+            [0, 4, 4]
         ];
     } else if (type === 'O') {
         return [
@@ -113,7 +113,6 @@ function drawMatrix(matrix, offset) {
             if (value !== 0) {
                 context.fillStyle = colors[value];
                 context.fillRect((x + offset.x) * blockSide, (y + offset.y) * blockSide, blockSide, blockSide);
-
             }
         });
     });
@@ -153,7 +152,7 @@ function playerDrop() {
 
 function playerInstaDrop() {
     while (!collide(board, player)) {
-        player.pos.y++
+        player.pos.y++;
     }
     player.pos.y--;
     merge(board, player);
@@ -183,6 +182,9 @@ function playerReset() {
             availablePieces.push(allPieces[i]);
         }
     }
+    console.log(allPieces);
+    console.log(availablePieces);
+
 
     player.pos.y = 0;
     player.pos.x = Math.floor(board[0].length / 2) - 1;
@@ -190,8 +192,13 @@ function playerReset() {
     if (collide(board, player)) {
         board.forEach(row => row.fill(0));
         player.score = 0;
-        availablePieces = allPieces;
         updateScore();
+        while (availablePieces.length !== 0) {
+            availablePieces.pop();
+        }
+        for (let i = 0; i < allPieces.length; i++) {
+            availablePieces.push(allPieces[i]);
+        }
     }
 }
 
