@@ -182,9 +182,6 @@ function playerReset() {
             availablePieces.push(allPieces[i]);
         }
     }
-    console.log(allPieces);
-    console.log(availablePieces);
-
 
     player.pos.y = 0;
     player.pos.x = Math.floor(board[0].length / 2) - 1;
