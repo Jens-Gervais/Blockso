@@ -168,8 +168,8 @@ function playerMove(direction) {
     }
 }
 
-const allPieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z'];
-let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z'];
+const allPieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
+let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
 function playerReset() {
     let randomNumber = Math.floor(availablePieces.length * Math.random());
     player.matrix = createPiece(availablePieces[randomNumber]);
