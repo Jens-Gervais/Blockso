@@ -1,11 +1,18 @@
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
+const nextCanvas = document.getElementById('next');
+const nextContext = nextCanvas.getContext('2d');
+
 const blockSide = 30;
 
 context.fillStyle = '#99aab5';
 context.lineWidth = 1;
 context.fillRect(0, 0, canvas.width, canvas.height);
+
+nextContext.fillStyle = '#99aab5';
+nextContext.lineWidth = 1;
+nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
 
 function drawGrid() {
     for (i = 0; i < canvas.height; i += blockSide) {
