@@ -180,18 +180,24 @@ let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
 let currentMatrixNumber = null;
 let nextMatrixNumber = null;
 function playerReset() {
-    let randomNumber = Math.floor(availablePieces.length * Math.random());
+    let randomNumber = Math.floor(allPieces.length * Math.random());
+    if (currentMatrixNumber === null) {
+        console.log('here');
+        nextMatrixNumber = randomNumber;
+    }
     currentMatrixNumber = nextMatrixNumber;
-    player.matrix = createPiece(availablePieces[randomNumber]);
+    nextMatrixNumber = randomNumber;
 
-    if (availablePieces.length > 1) {
+    player.matrix = createPiece(allPieces[currentMatrixNumber]);
+
+    /* if (availablePieces.length > 1) {
         availablePieces.splice(randomNumber, 1);
     } else if (availablePieces.length <= 1) {
         availablePieces.pop();
         for (let i = 0; i < allPieces.length; i++) {
             availablePieces.push(allPieces[i]);
         }
-    }
+    } */
 
     player.pos.y = 0;
     player.pos.x = Math.floor(board[0].length / 2) - 1;
@@ -208,7 +214,9 @@ function playerReset() {
         }
     }
 
-    nextMatrixNumber = randomNumber;
+    console.log('current block: ' + availablePieces[currentMatrixNumber]);
+    console.log('next block:    ' + availablePieces[nextMatrixNumber]);
+    console.log(' ');
 }
 
 function playerRotate(direction) {
