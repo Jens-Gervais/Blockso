@@ -170,8 +170,11 @@ function playerMove(direction) {
 
 const allPieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
 let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
+let currentMatrixNumber = null;
+let nextMatrixNumber = null;
 function playerReset() {
     let randomNumber = Math.floor(availablePieces.length * Math.random());
+    currentMatrixNumber = nextMatrixNumber;
     player.matrix = createPiece(availablePieces[randomNumber]);
 
     if (availablePieces.length > 1) {
@@ -197,6 +200,8 @@ function playerReset() {
             availablePieces.push(allPieces[i]);
         }
     }
+
+    nextMatrixNumber = randomNumber;
 }
 
 function playerRotate(direction) {
