@@ -5,6 +5,7 @@ const nextCanvas = document.getElementById('next');
 const nextContext = nextCanvas.getContext('2d');
 
 const blockSide = 30;
+const nextBlockSide = 30;
 
 context.fillStyle = '#99aab5';
 context.lineWidth = 1;
@@ -25,6 +26,18 @@ function drawGrid() {
         context.moveTo(i, 0);
         context.lineTo(i, canvas.height);
         context.stroke();
+    }
+
+    for (i = 0; i < nextCanvas.height; i += nextBlockSide) {
+        nextContext.moveTo(0, i);
+        nextContext.lineTo(nextCanvas.width, i);
+        nextContext.stroke();
+    }
+
+    for (i = 0; i < nextCanvas.width; i += nextBlockSide) {
+        nextContext.moveTo(i, 0);
+        nextContext.lineTo(i, nextCanvas.height);
+        nextContext.stroke();
     }
 }
 
@@ -125,13 +138,30 @@ function drawMatrix(matrix, offset) {
     });
 }
 
+function drawNextMatrix(matrix, offset) {
+    matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                nextContext.fillStyle = colors[value];
+                nextContext.fillRect((x + offset.x) * nextBlockSide, (y + offset.y) * nextBlockSide, nextBlockSide, nextBlockSide);
+            }
+        });
+    });
+}
+
 function draw() {
     canvas.width = canvas.width;
+    nextCanvas.width = nextCanvas.width;
+
     context.fillStyle = '#2c2f33';
+    nextContext.fillStyle = '#2c2f33';
+
     context.fillRect(0, 0, canvas.width, canvas.height);
+    nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height)
 
     drawMatrix(board, { x: 0, y: 0 });
     drawMatrix(player.matrix, player.pos);
+    drawNextMatrix(createPiece(allPieces[nextMatrixNumber]), { x: 0, y: 0 });
     drawGrid();
 }
 
@@ -175,10 +205,12 @@ function playerMove(direction) {
     }
 }
 
+
 const allPieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
 let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
 let currentMatrixNumber = null;
 let nextMatrixNumber = null;
+
 function playerReset() {
     let randomNumber = Math.floor(allPieces.length * Math.random());
     if (currentMatrixNumber === null) {

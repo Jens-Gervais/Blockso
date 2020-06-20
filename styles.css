@@ -3,17 +3,27 @@ body {
     color: white;
     font-family: sans-serif;
     font-size: 10vh;
-    text-align: center;
+}
+
+.score {
+    margin-left: 23vh;
+}
+
+.game {
+    display: flex;
+    flex-flow: nowrap;
+    flex-direction: row;
 }
 
 .board {
     border: solid .05em #DDDDDD;
     height: 80vh;
     box-shadow: 0px 0px 1vh 0.5vh rgba(255,255,255,1);
+    margin-right: 5vh;
 }
 
 .next {
     border: solid .05em #DDDDDD;
-    height: 20vh;
+    height: 16vh;
     box-shadow: 0px 0px 1vh 0.5vh rgba(255,255,255,1);
 }
