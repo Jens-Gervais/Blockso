@@ -263,8 +263,8 @@ function playerMove(direction) {
 }
 
 
-const allPieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
-let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
+const allPieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z'];
+let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z'];
 let currentMatrixNumber = null;
 let nextMatrixNumber = null;
 let holdMatrixNumber = null;
