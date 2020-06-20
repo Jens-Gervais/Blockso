@@ -201,7 +201,7 @@ function draw() {
     drawMatrix(board, { x: 0, y: 0 });
     drawMatrix(player.matrix, player.pos);
 
-    if (holdMatrixNumber !== 0) {
+    if (holdMatrixNumber !== null) {
         if (holdMatrixNumber == 1 || holdMatrixNumber == 7 || holdMatrixNumber == 0) {
             drawHoldMatrix(createPiece(allPieces[holdMatrixNumber]), { x: 0, y: 0 });
         } else if (holdMatrixNumber === 6 || holdMatrixNumber === 5 || holdMatrixNumber === 3) {
