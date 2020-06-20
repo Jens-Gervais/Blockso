@@ -4,8 +4,10 @@ const context = canvas.getContext('2d');
 const nextCanvas = document.getElementById('next');
 const nextContext = nextCanvas.getContext('2d');
 
+const holdCanvas = document.getElementById('hold');
+const holdContext = holdCanvas.getContext('2d');
+
 const blockSide = 30;
-const nextBlockSide = 30;
 
 context.fillStyle = '#aaaaaa';
 context.lineWidth = 1;
@@ -14,6 +16,11 @@ context.fillRect(0, 0, canvas.width, canvas.height);
 nextContext.fillStyle = '#aaaaaa';
 nextContext.lineWidth = 1;
 nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+
+holdContext.fillStyle = '#aaaaaa';
+holdContext.lineWidth = 1;
+holdContext.fillRect(0, 0, holdCanvas.width, holdCanvas.height);
+
 
 function drawGrid() {
     for (i = 0; i < canvas.height; i += blockSide) {
@@ -29,16 +36,29 @@ function drawGrid() {
         context.stroke();
     }
 
-    for (i = 0; i < nextCanvas.height; i += nextBlockSide) {
+    for (i = 0; i < nextCanvas.height; i += blockSide) {
         nextContext.moveTo(0, i);
         nextContext.lineTo(nextCanvas.width, i);
         nextContext.stroke();
     }
 
-    for (i = 0; i < nextCanvas.width; i += nextBlockSide) {
+    for (i = 0; i < nextCanvas.width; i += blockSide) {
         nextContext.moveTo(i, 0);
         nextContext.lineTo(i, nextCanvas.height);
         nextContext.stroke();
+    }
+
+    for (i = 0; i < holdCanvas.height; i += blockSide) {
+        holdContext.moveTo(0, i);
+        holdContext.lineTo(holdCanvas.width, i);
+        holdContext.stroke();
+
+    }
+
+    for (i = 0; i < holdCanvas.width; i += blockSide) {
+        holdContext.moveTo(i, 0);
+        holdContext.lineTo(i, holdCanvas.height);
+        holdContext.stroke();
     }
 }
 
@@ -54,6 +74,10 @@ function boardSweep() {
         let row = board.splice(y, 1)[0].fill(0);
         board.unshift(row);
         y++;
+        if (dropInterval > 50) {
+            dropInterval--;
+        }
+        console.log(dropInterval);
         player.score += lineCount * 10;
         lineCount *= 2;
     }
@@ -144,25 +168,49 @@ function drawNextMatrix(matrix, offset) {
         row.forEach((value, x) => {
             if (value !== 0) {
                 nextContext.fillStyle = colors[value];
-                nextContext.fillRect((x + offset.x) * nextBlockSide, (y + offset.y) * nextBlockSide, nextBlockSide, nextBlockSide);
+                nextContext.fillRect((x + offset.x) * blockSide, (y + offset.y) * blockSide, blockSide, blockSide);
+            }
+        });
+    });
+}
+
+function drawHoldMatrix(matrix, offset) {
+    matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                holdContext.fillStyle = colors[value];
+                holdContext.fillRect((x + offset.x) * blockSide, (y + offset.y) * blockSide, blockSide, blockSide);
             }
         });
     });
 }
 
 function draw() {
-
     canvas.width = canvas.width;
     nextCanvas.width = nextCanvas.width;
+    holdCanvas.width = holdCanvas.width;
 
     context.fillStyle = '#404348';
     nextContext.fillStyle = '#404348';
+    holdContext.fillStyle = '#404348';
 
     context.fillRect(0, 0, canvas.width, canvas.height);
     nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height)
+    holdContext.fillRect(0, 0, holdCanvas.width, holdCanvas.height);
 
     drawMatrix(board, { x: 0, y: 0 });
     drawMatrix(player.matrix, player.pos);
+
+    if (holdMatrixNumber !== 0) {
+        if (holdMatrixNumber == 1 || holdMatrixNumber == 7 || holdMatrixNumber == 0) {
+            drawHoldMatrix(createPiece(allPieces[holdMatrixNumber]), { x: 0, y: 0 });
+        } else if (holdMatrixNumber === 6 || holdMatrixNumber === 5 || holdMatrixNumber === 3) {
+            drawHoldMatrix(createPiece(allPieces[holdMatrixNumber]), { x: 0, y: 1 });
+        } else if (holdMatrixNumber === 2 || holdMatrixNumber === 4) {
+            drawHoldMatrix(createPiece(allPieces[holdMatrixNumber]), { x: 1, y: 1 });
+        }
+    }
+
     if (nextMatrixNumber == 1 || nextMatrixNumber == 7 || nextMatrixNumber == 0) {
         drawNextMatrix(createPiece(allPieces[nextMatrixNumber]), { x: 0, y: 0 });
     } else if (nextMatrixNumber === 6 || nextMatrixNumber === 5 || nextMatrixNumber === 3) {
@@ -219,26 +267,17 @@ const allPieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
 let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z', 'I'];
 let currentMatrixNumber = null;
 let nextMatrixNumber = null;
+let holdMatrixNumber = null;
 
 function playerReset() {
     let randomNumber = Math.floor(allPieces.length * Math.random());
     if (currentMatrixNumber === null) {
-        console.log('here');
         nextMatrixNumber = randomNumber;
     }
     currentMatrixNumber = nextMatrixNumber;
     nextMatrixNumber = randomNumber;
 
     player.matrix = createPiece(allPieces[currentMatrixNumber]);
-
-    /* if (availablePieces.length > 1) {
-        availablePieces.splice(randomNumber, 1);
-    } else if (availablePieces.length <= 1) {
-        availablePieces.pop();
-        for (let i = 0; i < allPieces.length; i++) {
-            availablePieces.push(allPieces[i]);
-        }
-    } */
 
     player.pos.y = 0;
     player.pos.x = Math.floor(board[0].length / 2) - 1;
@@ -255,9 +294,32 @@ function playerReset() {
         }
     }
 
-    console.log('current block: ' + availablePieces[currentMatrixNumber]);
-    console.log('next block:    ' + availablePieces[nextMatrixNumber]);
-    console.log(' ');
+    if (dropInterval > 50) {
+        dropInterval--;
+    }
+    console.log(dropInterval);
+}
+
+let firstHold = true;
+function hold() {
+    let move = 1
+    if (firstHold) {
+        holdMatrixNumber = currentMatrixNumber;
+        playerReset();
+        firstHold = false;
+    } else if (!firstHold) {
+        let helper = currentMatrixNumber;
+        currentMatrixNumber = holdMatrixNumber;
+        holdMatrixNumber = helper;
+        hold
+        player.matrix = createPiece(allPieces[currentMatrixNumber]);
+        while (collide(board, player)) {
+            playerMove(move);
+            move = -(move + 1);
+        }
+        draw();
+    }
+
 }
 
 function playerRotate(direction) {
@@ -304,7 +366,6 @@ function updateScore() {
 }
 
 const colors = [null, '#2fedfd', '#5fd2ff', '#969efd', '#c465ff', '#e92fff', '#ef16fd', '#e91ff7'];
-
 const board = createMatrix(12, 20);
 
 const player = {
@@ -324,6 +385,8 @@ document.addEventListener('keydown', key => {
         playerRotate();
     } else if (key.keyCode === 32) {
         playerInstaDrop();
+    } else if (key.keyCode === 16) {
+        hold();
     }
 })
 
