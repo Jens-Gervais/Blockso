@@ -7,11 +7,11 @@ const nextContext = nextCanvas.getContext('2d');
 const blockSide = 30;
 const nextBlockSide = 30;
 
-context.fillStyle = '#99aab5';
+context.fillStyle = '#aaaaaa';
 context.lineWidth = 1;
 context.fillRect(0, 0, canvas.width, canvas.height);
 
-nextContext.fillStyle = '#99aab5';
+nextContext.fillStyle = '#aaaaaa';
 nextContext.lineWidth = 1;
 nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
 
@@ -20,6 +20,7 @@ function drawGrid() {
         context.moveTo(0, i);
         context.lineTo(canvas.width, i);
         context.stroke();
+
     }
 
     for (i = 0; i < canvas.width; i += blockSide) {
@@ -150,18 +151,26 @@ function drawNextMatrix(matrix, offset) {
 }
 
 function draw() {
+
     canvas.width = canvas.width;
     nextCanvas.width = nextCanvas.width;
 
-    context.fillStyle = '#2c2f33';
-    nextContext.fillStyle = '#2c2f33';
+    context.fillStyle = '#404348';
+    nextContext.fillStyle = '#404348';
 
     context.fillRect(0, 0, canvas.width, canvas.height);
     nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height)
 
     drawMatrix(board, { x: 0, y: 0 });
     drawMatrix(player.matrix, player.pos);
-    drawNextMatrix(createPiece(allPieces[nextMatrixNumber]), { x: 0, y: 0 });
+    if (nextMatrixNumber == 1 || nextMatrixNumber == 7 || nextMatrixNumber == 0) {
+        drawNextMatrix(createPiece(allPieces[nextMatrixNumber]), { x: 0, y: 0 });
+    } else if (nextMatrixNumber === 6 || nextMatrixNumber === 5 || nextMatrixNumber === 3) {
+        drawNextMatrix(createPiece(allPieces[nextMatrixNumber]), { x: 0, y: 1 });
+    } else if (nextMatrixNumber === 2 || nextMatrixNumber === 4) {
+        drawNextMatrix(createPiece(allPieces[nextMatrixNumber]), { x: 1, y: 1 });
+    }
+
     drawGrid();
 }
 
@@ -291,7 +300,7 @@ function update(time = 0) {
 }
 
 function updateScore() {
-    document.getElementById('score').innerText = player.score;
+    document.getElementById('score').innerText = "Score: " + player.score;
 }
 
 const colors = [null, '#2fedfd', '#5fd2ff', '#969efd', '#c465ff', '#e92fff', '#ef16fd', '#e91ff7'];
