@@ -1,4 +1,5 @@
 body {
+    height: 100vh;
     background-image: linear-gradient(#202328, #404348);
     color: white;
     font-family: sans-serif;
