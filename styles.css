@@ -4,6 +4,7 @@ body {
     color: white;
     font-family: sans-serif;
     font-size: 9vh;
+    overflow: hidden;
 }
 
 .score {
