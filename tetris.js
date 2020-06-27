@@ -225,7 +225,7 @@ function draw() {
 function merge(board, player) {
     player.matrix.forEach((row, y) => {
         row.forEach((value, x) => {
-            if (value !== 0) {
+            if (value !== 0) {  
                 board[y + player.pos.y][x + player.pos.x] = value;
             }
         });
