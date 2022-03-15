@@ -395,13 +395,13 @@ function updateScore() {
 
 const colors = [
   null,
-  "#2fedfd",
-  "#5fd2ff",
-  "#969efd",
-  "#c465ff",
-  "#e92fff",
-  "#ef16fd",
-  "#e91ff7",
+  "#FF595E",
+  "#FF924C",
+  "#FFCA3A",
+  "#8AC926",
+  "#52A675",
+  "#1982C4",
+  "#6A4C93",
 ];
 const board = createMatrix(12, 20);
 
