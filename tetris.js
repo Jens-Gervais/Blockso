@@ -287,11 +287,12 @@ function playerMove(direction) {
   }
 }
 
-/* const allPieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z'];
-let availablePieces = ['T', 'I', 'J', 'L', 'O', 'S', 'Z']; */
+const allPieces = ["T", "I", "J", "L", "O", "S", "Z"];
+let availablePieces = ["T", "I", "J", "L", "O", "S", "Z"];
 
-const allPieces = ["S", "Z", "S", "Z", "S", "Z"];
-let availablePieces = ["S", "Z", "S", "Z", "S", "Z"];
+// Rage mode
+/* const allPieces = ["S", "Z", "S", "Z", "S", "Z"];
+let availablePieces = ["S", "Z", "S", "Z", "S", "Z"]; */
 
 let currentMatrixNumber = null;
 let nextMatrixNumber = null;
