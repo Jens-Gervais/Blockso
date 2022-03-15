@@ -203,9 +203,9 @@ function draw() {
   nextCanvas.width = nextCanvas.width;
   holdCanvas.width = holdCanvas.width;
 
-  context.fillStyle = "#404348";
-  nextContext.fillStyle = "#404348";
-  holdContext.fillStyle = "#404348";
+  context.fillStyle = "#222222";
+  nextContext.fillStyle = "#222222";
+  holdContext.fillStyle = "#222222";
 
   context.fillRect(0, 0, canvas.width, canvas.height);
   nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
